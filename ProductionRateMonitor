@@ -9,28 +9,28 @@
 // @run-at       document-start
 // ==/UserScript==
 
-(function() {
+(function () {
     'use strict';
     const trackedItems = [
-        {item: 'Wood', count: 0, first: 0, oneMin: 0, oneHour: 0},
-        {item: 'Lumber', count: 0, first: 0, oneMin: 0, oneHour: 0},
-        {item: 'Iron', count: 0, first: 0, oneMin: 0, oneHour: 0},
-        {item: 'Gasoline', count: 0, first: 0, oneMin: 0, oneHour: 0},
-        {item: 'Energy', count: 0, first: 0, oneMin: 0, oneHour: 0},
-        {item: 'Wine_Bottle', count: 0, first: 0, oneMin: 0, oneHour: 0},
-        {item: 'Feed', count: 0, first: 0, oneMin: 0, oneHour: 0},
-        {item: 'Wheat', count: 0, first: 0, oneMin: 0, oneHour: 0},
-        {item: 'Milk', count: 0, first: 0, oneMin: 0, oneHour: 0}
+        { item: 'Wood', count: 0, first: 0, oneMin: 0, oneHour: 0 },
+        { item: 'Lumber', count: 0, first: 0, oneMin: 0, oneHour: 0 },
+        { item: 'Iron', count: 0, first: 0, oneMin: 0, oneHour: 0 },
+        { item: 'Gasoline', count: 0, first: 0, oneMin: 0, oneHour: 0 },
+        { item: 'Energy', count: 0, first: 0, oneMin: 0, oneHour: 0 },
+        { item: 'Wine_Bottle', count: 0, first: 0, oneMin: 0, oneHour: 0 },
+        { item: 'Feed', count: 0, first: 0, oneMin: 0, oneHour: 0 },
+        { item: 'Wheat', count: 0, first: 0, oneMin: 0, oneHour: 0 },
+        { item: 'Milk', count: 0, first: 0, oneMin: 0, oneHour: 0 }
     ];
     let loaded = 0;
     let startDateTime = Date.now();
 
-    new MutationObserver(function(mutations) {
+    new MutationObserver(function (mutations) {
         if (document.querySelector('.hud .right .hud-right') && loaded == 0) {
             loaded = 1;
             LoadProductionMonitor();
         }
-    }).observe(document, {childList: true, subtree: true});
+    }).observe(document, { childList: true, subtree: true });
 
     function LoadProductionMonitor() {
         let trackedHud = document.createElement('div');
@@ -39,7 +39,7 @@
         trackedItemHeader.id = 'tracked-item-header';
         trackedItemHeader.classList.add('bank');
         trackedItemHeader.style = 'width: 75%;';
-        document.getElementById('tracked-item-header').innerHTML = 'Session:&nbsp;' + GetDuration(startDateTime);
+        trackedItemHeader.innerHTML = 'Session:&nbsp;' + GetDuration(startDateTime);
         trackedHud.appendChild(trackedItemHeader);
         let hudRight = document.querySelector('.hud .right .hud-right');
         hudRight.insertBefore(trackedHud, hudRight.querySelector('.right-hud').nextSibling);
@@ -74,9 +74,9 @@
         }
 
         let origfindDeliverOutputTask = TS_UnitLogic.prototype.findDeliverOutputTask;
-        TS_UnitLogic.prototype.findDeliverOutputTask = function(t) {
+        TS_UnitLogic.prototype.findDeliverOutputTask = function (t) {
             let origReturn = origfindDeliverOutputTask.call(this, t);
-            return origReturn ? new TrackUnitDeliverOutputTask(origReturn.unit,origReturn.targetObject,t) : null
+            return origReturn ? new TrackUnitDeliverOutputTask(origReturn.unit, origReturn.targetObject, t) : null
         }
     }
 
